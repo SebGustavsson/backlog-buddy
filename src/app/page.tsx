@@ -1,6 +1,38 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function Home() {
+  // Fun feature: random suggestion / surprise button
+  const suggestions = [
+    "Spela 30 min av sista köpet 🕹️",
+    "Utforska ett indie-äventyr 🌟",
+    "Kör co-op med en vän 🤝",
+    "Återuppta ett avbrutet RPG 🗺️",
+    "Testa ett kort roguelite 🔁",
+    "Ge ett gammalt spel en ny chans 🔁",
+    "Satsa på en snabb speedrun ⏱️",
+  ];
+
+  const [suggestion, setSuggestion] = useState<string | null>(null);
+  const [burst, setBurst] = useState(false);
+
+  function surpriseMe() {
+    const pick = suggestions[Math.floor(Math.random() * suggestions.length)];
+    setSuggestion(pick);
+    // small emoji burst animation trigger
+    setBurst(true);
+    setTimeout(() => setBurst(false), 700);
+  }
+
+  // auto-hide suggestion after a short time so tests can assert presence then disappearance
+  useEffect(() => {
+    if (!suggestion) return;
+    const t = setTimeout(() => setSuggestion(null), 4000);
+    return () => clearTimeout(t);
+  }, [suggestion]);
+
   return (
     <div className="bg-gray-900 text-white min-h-screen font-sans">
       
@@ -52,6 +84,35 @@ export default function Home() {
               </div>
             </div>
 
+          </div>
+
+          {/* Fun: Surprise me control */}
+          <div className="mt-6 flex items-center justify-center space-x-4">
+            <button
+              onClick={surpriseMe}
+              className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 px-4 rounded-lg shadow-md transition duration-150"
+              aria-label="Surprise me"
+              data-testid="surprise-button"
+            >
+              Överraska mig
+            </button>
+
+            {suggestion && (
+              <div
+                className="ml-2 bg-gray-900 border border-gray-700 text-gray-100 px-4 py-2 rounded-lg flex items-center space-x-3 transform transition-all duration-300"
+                data-testid="surprise-suggestion"
+              >
+                <div className={`text-2xl ${burst ? "scale-110" : ""}`}>🎉</div>
+                <div className="text-left text-sm">{suggestion}</div>
+                <button
+                  onClick={() => setSuggestion(null)}
+                  className="ml-3 text-gray-400 hover:text-gray-200"
+                  aria-label="Close suggestion"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
           </div>
           
         </div>
