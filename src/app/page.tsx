@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import Popup from '../components/Popup';
 import LoginPopup from '../components/LoginPopup';
 
