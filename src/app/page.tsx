@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Popup from '../components/Popup';
+import LoginPopup from '../components/LoginPopup';
+
 
 export default function Home() {
   // Fun feature: random suggestion / surprise button
@@ -33,6 +36,16 @@ export default function Home() {
     return () => clearTimeout(t);
   }, [suggestion]);
 
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  function openPopup() {
+    setIsPopupOpen(true);
+  }
+
+  function closePopup() {
+    setIsPopupOpen(false);
+  }
+
   return (
     <div className="bg-gray-900 text-white min-h-screen font-sans">
       
@@ -41,7 +54,7 @@ export default function Home() {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold text-indigo-400">Backlog Buddy</h1>
           <nav>
-            <a href="#" className="text-gray-300 hover:text-indigo-400 transition duration-150 mr-4">Om oss</a>
+            <a href="/about" className="text-gray-300 hover:text-indigo-400 transition duration-150 mr-4">Om oss</a>
             <a href="#" className="text-gray-300 hover:text-indigo-400 transition duration-150">Vanliga frågor</a>
           </nav>
         </div>
@@ -65,7 +78,9 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
             
             {/* Alternativ 1: Steam OpenID (Föredragen) */}
-            <button className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md shadow-indigo-500/50 flex items-center justify-center">
+            <button 
+              onClick={openPopup} 
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-lg transition duration-300 shadow-md shadow-indigo-500/50 flex items-center justify-center">
               {/* Platshållare för Steam-ikon */}
               <svg className="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.391 14.832c.691-.194 1.157-.8 1.157-1.503 0-.916-.763-1.583-1.672-1.583h-3.876c-.341 0-.671-.164-.881-.444-.225-.297-.282-.693-.157-1.049.207-.577.834-.949 1.543-.949h3.69c.642 0 1.17-.528 1.17-1.17s-.528-1.17-1.17-1.17h-3.69c-2.31 0-4.223 1.838-4.223 4.102 0 1.625.969 3.033 2.458 3.659v1.288c0 .642.528 1.17 1.17 1.17h1.492c.642 0 1.17-.528 1.17-1.17s-.528-1.17-1.17-1.17h-1.492c-.173 0-.34-.038-.493-.11.458-.293.751-.8.751-1.378 0-.987-.803-1.79-1.79-1.79h-3.076c-.642 0-1.17-.528-1.17-1.17s.528-1.17 1.17-1.17h3.076c.404 0 .736.332.736.736 0 .404-.332.736-.736.736h-3.076c-.305 0-.555.25-.555.555s.25.555.555.555h4.156c1.177 0 2.137.96 2.137 2.137 0 .546-.208 1.055-.58 1.442z"/>
@@ -155,6 +170,9 @@ export default function Home() {
         </div>
       </footer>
 
+      <Popup isOpen={isPopupOpen} onClose={closePopup}>
+        <LoginPopup />
+      </Popup>
     </div>
   );
 }
